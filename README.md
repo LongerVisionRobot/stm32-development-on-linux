@@ -8,6 +8,14 @@ http://www.embbnux.com/2014/02/01/linux_stm32_use_openocd_openjtag/)
 
 ### ubuntu
 
+本仓库是以我手上stm32f103zet为例，512K ROM，属于high-density型号。
+如不是这个型号，请务必修改下列2个文件。至于怎么改，请参考网上的内存分布地址。或者参考stm32f10x.h中宏定义的地址
+
+	vi Makefile.common
+    # TypeOfMCU=STM32F10X_xx
+    vi linker.ld
+    # MEMORY部分
+
 #### arm-none-eabi-gcc
 
 使用官方仓库中的release binary而不是APT源中的arm-none-eabi-gcc
@@ -65,6 +73,36 @@ Startup标签中
     
 实际上要参考GNU ARM Ecplise插件官网的使用说明，原文非常难看懂，字体好模糊。。。
 
+#### make clean
+
+由于实际应用中很少修改libstm32.a这个库文件，为节省编译时间，我将clean动作设定为不删掉libstm32.a，想彻底clean可以执行
+
+	make cleanall
+
+#### use JLink
+
+安装 openocd
+
+	sudo apt-get install openocd
+
+插上jlink，添加白名单。
+	
+    lsusb
+    # 记下当前的jlink的硬件id，例如，ID 1366:0101
+	sudo gedit /etc/udev/rules.d/xxxxxx.rules
+    # 添加一行
+	SYSFS{idProduct}=="0101", SYSFS{idVendor}=="1366", MODE="666", GROUP="plugdev"
+    
+这样权限666,使用openocd就不用sudo了. 
+拔下，插上一次.
+
+本仓库使用原作者的perl脚本，直接执行就能烧写bin文件
+
+	./do_flash.pl bin/main.bin    
+    
+我直接往Makefile加入烧录命令了，下次直接make flash就可以实现上面这句功能
+
+	make flash
 
 ### Mac OS
 
