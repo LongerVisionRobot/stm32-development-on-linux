@@ -23,9 +23,9 @@ tail -n +2 |
 while read line
 do
 	filename=${line##*/}
-	if [ ${filename%f10x*.*} = "stm32" ];then
-		continue
-	fi
+	#if [ ${filename%f10x*.*} = "stm32" ];then
+	#	continue
+	#fi
 
 	if [ -f ${line} ];then
 		echo "bash: cp ${line} /tmp/ccc/"
