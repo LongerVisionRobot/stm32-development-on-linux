@@ -15,7 +15,9 @@ all: libs src
 	arm-none-eabi-size -d -B -t $(PROGRAM_NAME).elf > $(PROGRAM_NAME).info_size
 	arm-none-eabi-objdump -S $(PROGRAM_NAME).elf > $(PROGRAM_NAME).info_code
 	arm-none-eabi-nm -t d -S --size-sort -s $(PROGRAM_NAME).elf > $(PROGRAM_NAME).info_symbol
-
+# binary execute hex and bin
+	$(OBJCOPY) -O ihex $(PROGRAM_NAME).elf $(PROGRAM_NAME).hex
+	$(OBJCOPY) -O binary $(PROGRAM_NAME).elf $(PROGRAM_NAME).bin
 
 .PHONY: libs src clean tshow cleanall
 

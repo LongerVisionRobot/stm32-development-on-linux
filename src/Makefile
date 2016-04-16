@@ -6,7 +6,8 @@ CFLAGS_USE_NEWLIB=-ffunction-sections -fdata-sections -fno-builtin
 # Add your files to compile, FORMAT:[ *.o ]
 OBJS+=startup.o
 OBJS+=main.o
-
+OBJS+=newlib_stubs.o
+OBJS+=usart.o
 
 all: src
 
