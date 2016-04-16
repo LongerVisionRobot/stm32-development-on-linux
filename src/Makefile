@@ -1,30 +1,36 @@
 # src Makefile
 include ../Makefile.common
 
-# Do not del startup.o, or it could not load.
+# Do not remove startup.o below, or it could not load.
+VPATH=startup
 OBJS=startup.o
-
-# use newa
+# use newlib
 OBJS+=newlib_stubs.o
 CFLAGS_USE_NEWLIB=-ffunction-sections -fdata-sections -fno-builtin
 
-# Add your project files, FORMAT: [ *.o ]
+# Write down your source folder and obj-files
+VPATH+=main
 OBJS+=main.o
 OBJS+=usart.o
 
-all: src
+#VPATH+=led
+#OBJS+=led.o
+#OBJS+=key_led.o
 
+all: src
 src: app.a
 
 app.a: $(OBJS)
-		$(AR) cr app.a $(OBJS)
+		cd startup && $(AR) cr ../app.a $(OBJS)
 $(OBJS):%.o: %.c
-		$(CC) -c $<  $(CFLAGS) $(CFLAGS_USE_NEWLIB)
+		$(CC) -c $< -o startup/$*.o $(CFLAGS) $(CFLAGS_USE_NEWLIB)
+
 
 .PHONY: src clean tshow
 
 clean:
-		rm -f app.a $(OBJS)
+		rm -f app.a 
+		cd startup && rm -f $(OBJS)
 tshow:
 		@echo "-------------------------------------------------"
 		@echo "optimize settings: $(InfoTextLib), $(InfoTextSrc)"

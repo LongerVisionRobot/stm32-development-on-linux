@@ -22,7 +22,8 @@ GDB=$(TC)-gdb
 TypeOfMCU=STM32F10X_HD
 #========================================#
 
-INCLUDE=-I/home/li/programs/toolchain/gcc-arm-none-eabi-5_3-2016q1/arm-none-eabi/include
+INCLUDE+=-I.
+INCLUDE+=-I/home/li/programs/toolchain/gcc-arm-none-eabi-5_3-2016q1/arm-none-eabi/include
 INCLUDE+=-I$(STMLIB)/CMSIS/Include
 INCLUDE+=-I$(STMLIB)/CMSIS/Device/ST/STM32F10x/Include
 INCLUDE+=-I$(STMLIB)/CMSIS/Device/ST/STM32F10x/Source/Templates
