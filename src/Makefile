@@ -1,12 +1,15 @@
 # src Makefile
 include ../Makefile.common
 
+# Do not del startup.o, or it could not load.
+OBJS=startup.o
+
+# use newa
+OBJS+=newlib_stubs.o
 CFLAGS_USE_NEWLIB=-ffunction-sections -fdata-sections -fno-builtin
 
-# Add your files to compile, FORMAT:[ *.o ]
-OBJS+=startup.o
+# Add your project files, FORMAT: [ *.o ]
 OBJS+=main.o
-OBJS+=newlib_stubs.o
 OBJS+=usart.o
 
 all: src
