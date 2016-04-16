@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+# sudo apt-get install libnet-telnet-perl 
+
 use Net::Telnet;
 
 $numArgs = $#ARGV + 1;
@@ -21,7 +23,7 @@ print $telnet->cmd('reset halt');
 print $telnet->cmd('flash probe 0');
 print $telnet->cmd('stm32f1x mass_erase 0');
 print $telnet->cmd('flash write_bank 0 '.$file.' 0');
-print $telnet->cmd('reset halt');
+print $telnet->cmd('reset');
 print $telnet->cmd('exit');
 
 print "\n";
