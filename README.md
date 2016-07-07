@@ -19,7 +19,8 @@ http://www.embbnux.com/2014/02/01/linux_stm32_use_openocd_openjtag/)
 #### arm-none-eabi-gcc
 
 使用官方仓库中的release binary而不是APT源中的arm-none-eabi-gcc
-[GCC ARM Embedded](https://launchpad.net/gcc-arm-embedded)
+
+官网[GCC ARM Embedded](https://launchpad.net/gcc-arm-embedded)
 下载二进制文件解压，然后往系统变量path写入arm-none-eabi-gcc路径
 
 为什么使用官方仓库？因为它包含了newlib，而apt不包含它，这个newlib库专门为小型嵌入式设备支持标准的C语言IO操作，例如fopen fprintf等，而不必编译系统的库函数导致code空间大增。
