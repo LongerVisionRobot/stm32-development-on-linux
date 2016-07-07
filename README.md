@@ -32,18 +32,31 @@ http://www.embbnux.com/2014/02/01/linux_stm32_use_openocd_openjtag/)
 
 在Eclipse中新建一个C工程为"Makefile project"指定toolchain为Other toolchain。
 
-然后打开工程属性properties，左侧定位C/C++ Build->Enviorment
-右侧将C_INCLUDE_PATH改为arm-none-eabi-gcc的include路径，例如我的是
+工程属性properties，左侧定位C/C++ Build->toolchain editor
+右侧将current toolchain改为Cross GCC
 
-	/home/li/programs/toolchain/gcc-arm-none-eabi-5_3-2016q1/arm-none-eabi/include
-    
-新建一个PATH变量，填入系统path加上arm-none-eabi-gcc的绝对路径,下面就是该变量的值。等价于在shell执行export PATH=$PATH:/home/......
+左侧定位C/C++ Build->settings中的code
 
-	${PATH}:/home/li/programs/toolchain/gcc-arm-none-eabi-5_3-2016q1/bin
-    
-这样可以右键工程名->Build Project来实现调用Makefile编译。
+右侧Tool settings的cross setting填入前缀
 
-由于是CROSS-compile交叉编译，实际使用中还是发现不少type not resolved错误，属于正常现象，可以将其关闭：project settings中的code analysis右边“使用工程设置”->取消symbol not resolved和type not resolved
+	arm-none-eabi-
+	
+PATH改为工具链的bin目录
+
+	/home/li/programs/toolchain/gcc-arm-none-eabi-5_3-2016q1/bin/
+	
+
+最后在左侧定位C/C++ Build根标签中，取消勾选“Generate Makefile Automatically”，下面的build dir改为工程根目录，比如像这样
+
+	${workspace_loc:/my-project-for-stm32}
+
+工程属性->左侧定位C/C++ General->Path and Symbol，右侧修改各种symbol(宏定义)和include目录。参考Makefile.common的INCLUDE变量和宏定义
+
+此刻，右键工程选择build project即可编译
+
+不使用eclipse产生二进制（elf文件），在工程属性左侧定位C/C++ Build->settings，取消勾选Binary Parsers下面的二进制文件
+	
+由于是CROSS-compile交叉编译，实际使用中还是发现不少type not resolved错误，属于正常现象，可以将其关闭：project settings中的code analysis右边“使用工程设置”(即仅本项目生效)->取消symbol not resolved和type not resolved
 
 #### Debug via JLink
 安装[GNU ARM Ecplise插件](https://gnuarmeclipse.github.io/)
