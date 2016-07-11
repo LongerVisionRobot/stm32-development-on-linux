@@ -7,28 +7,38 @@ PROGRAM_NAME=bin/main
 LIBDIR=$(TOP)/libs
 STMLIB=$(LIBDIR)/STM32_USB-FS-Device_Lib_V4.0.0/Libraries
 
-TC=arm-none-eabi
+# Toolchain settings
+TC_PATH=/mydata/toolchain/gcc-arm-none-eabi-5_3-2016q1
+TC=$(TC_PATH)/bin/arm-none-eabi
 CC=$(TC)-gcc
 LD=$(TC)-ld -v
-OBJCOPY=$(TC)-objcopy
 AR=$(TC)-ar
 GDB=$(TC)-gdb
+# dump tools
+OBJCOPY=$(TC)-objcopy
+READELF=$(TC)-readelf
+SIZE=$(TC)-size
+OBJDUMP=$(TC)-objdump
+NM=$(TC)-nm
 
 # Device
 #STM32F103RBT (128KB FLASH, 20KB RAM) --> STM32F10X_MD
 #STM32F103RET (512KB FLASH, 64KB RAM) --> STM32F10X_HD
 #STM32F103ZET (512KB FLASH, 64KB RAM) --> STM32F10X_HD
-#========================================#
 TypeOfMCU=STM32F10X_HD
-#========================================#
+CFLAGS+=-D $(TypeOfMCU)
 
 INCLUDE+=-I.
-INCLUDE+=-I/home/li/programs/toolchain/gcc-arm-none-eabi-5_3-2016q1/arm-none-eabi/include
+INCLUDE+=-I$(TC_PATH)/arm-none-eabi/include
 INCLUDE+=-I$(STMLIB)/CMSIS/Include
 INCLUDE+=-I$(STMLIB)/CMSIS/Device/ST/STM32F10x/Include
 INCLUDE+=-I$(STMLIB)/CMSIS/Device/ST/STM32F10x/Source/Templates
 INCLUDE+=-I$(STMLIB)/STM32F10x_StdPeriph_Driver/inc
 INCLUDE+=-I$(STMLIB)/STM32_USB-FS-Device_Driver/inc
+
+# symbols or marcos defined here
+SYMBOLS_DEFINE = -DMY_DEBUG -DUSE_STATIC_LIB
+CFLAGS+=$(SYMBOLS_DEFINE)
 
 COMMONFLAGS=-g -mcpu=cortex-m3 -mthumb
 COMMONFLAGSlib=$(COMMONFLAGS)
@@ -65,7 +75,6 @@ endif
 
 CFLAGS+=$(COMMONFLAGS) -Wall $(INCLUDE)
 CFLAFS+=-Werror
-CFLAGS+=-D $(TypeOfMCU)
 CFLAGS+=-D VECT_TAB_FLASH
 
 #Commands for libs Makefile

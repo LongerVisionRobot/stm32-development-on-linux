@@ -9,6 +9,7 @@ OBJS+=newlib_stubs.o
 CFLAGS_USE_NEWLIB=-ffunction-sections -fdata-sections -fno-builtin
 
 # Write down your source folder and obj-files
+# in some case you should put stm32f10x_it.o here
 VPATH+=main
 OBJS+=main.o
 OBJS+=usart.o
