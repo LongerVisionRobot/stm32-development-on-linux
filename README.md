@@ -95,9 +95,10 @@ Startup标签中
 
 #### use JLink
 
-安装 openocd
+安装 openocd 和 perl for telenet
 
 	sudo apt-get install openocd
+	sudo apt-get install libnet-telnet-perl
 
 插上jlink，添加白名单。
 	
