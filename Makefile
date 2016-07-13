@@ -15,7 +15,7 @@ all: libs src
 	@$(OBJDUMP) -S $(PROGRAM_NAME).elf > $(PROGRAM_NAME).info_code
 	@$(NM) -t d -S --size-sort -s $(PROGRAM_NAME).elf > $(PROGRAM_NAME).info_symbol
 # convert to hex and bin
-	@$(OBJCOPY) -O binary $(PROGRAM_NAME).elf $(PROGRAM_NAME).bin
+#	@$(OBJCOPY) -O binary $(PROGRAM_NAME).elf $(PROGRAM_NAME).bin
 	@$(OBJCOPY) -O ihex $(PROGRAM_NAME).elf $(PROGRAM_NAME).hex
 	@$(SIZE) -d -B $(PROGRAM_NAME).elf $(PROGRAM_NAME).hex > $(PROGRAM_NAME).info_size
 # display binaries size
@@ -41,4 +41,12 @@ tshow:
 		@echo "-------------------------------------------------"
 
 flash:all
-	./do_flash.pl $(TOP)/$(PROGRAM_NAME).bin  
+#	use JLink for linux
+	@echo 'power on' > $(JLINKEXE_SCRIPT)
+	@echo 'loadfile $(PROGRAM_NAME).hex' >> $(JLINKEXE_SCRIPT)
+	@echo 'r' >> $(JLINKEXE_SCRIPT)
+	@echo 'go' >> $(JLINKEXE_SCRIPT)
+	@echo 'qc' >> $(JLINKEXE_SCRIPT)
+	JLinkExe -Device $(SUPPORTED_DEVICE) -Speed 4000 -If SWD $(JLINKEXE_SCRIPT)
+#	use openOCD
+#	perl ./do_flash.pl $(TOP)/$(PROGRAM_NAME).bin  

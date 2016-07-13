@@ -28,6 +28,11 @@ NM=$(TC)-nm
 TypeOfMCU=STM32F10X_HD
 CFLAGS+=-D $(TypeOfMCU)
 
+# use JLinkExe for 'make flash'
+# https://www.segger.com/jlink_supported_devices.html
+JLINKEXE_SCRIPT=/tmp/JLinkExe.script
+SUPPORTED_DEVICE=STM32F103ZE
+
 INCLUDE+=-I.
 INCLUDE+=-I$(TC_PATH)/arm-none-eabi/include
 INCLUDE+=-I$(STMLIB)/CMSIS/Include

@@ -93,7 +93,11 @@ Startup标签中
 
 	make cleanall
 
-#### use JLink
+#### flash to your chip
+
+方法一：使用openocd
+
+详细请参考标题的文章，这里仅列出我的设备下载方法。
 
 安装 openocd 和 perl for telenet
 
@@ -111,13 +115,17 @@ Startup标签中
 这样权限666,使用openocd就不用sudo了. 
 拔下，插上一次.
 
-本仓库使用原作者的perl脚本，直接执行就能烧写bin文件
+使用原作者的perl脚本，直接执行就能烧写bin文件
 
 	./do_flash.pl bin/main.bin    
     
-我直接往Makefile加入烧录命令了，下次直接make flash就可以实现上面这句功能
+往Makefile加入openocd烧录命令了，下次直接make flash就可以实现上面这句功能
 
-	make flash
+方法二：使用JLinkExe
+
+首先安装Jlink，上面有提到。
+
+目前把JLinkExe作为下载软件，写进去Makefile脚本了，可以根据实际芯片型号修改Makefile.common中的SUPPORTED_DEVICE变量。
 
 ### Mac OS
 
