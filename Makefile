@@ -22,7 +22,7 @@ all: libs src
 	@echo -------------------------------------------------------
 	@cat $(PROGRAM_NAME).info_size
 
-.PHONY: libs src clean tshow cleanall
+.PHONY: libs src clean tshow cleanall erase
 
 libs:
 	$(MAKE) -C libs $@
@@ -50,3 +50,9 @@ flash:all
 	JLinkExe -Device $(SUPPORTED_DEVICE) -Speed 4000 -If SWD $(JLINKEXE_SCRIPT)
 #	use openOCD
 #	perl ./do_flash.pl $(TOP)/$(PROGRAM_NAME).bin  
+
+erase:
+	@echo 'power on' > $(JLINKEXE_SCRIPT)
+	@echo 'erase' >> $(JLINKEXE_SCRIPT)
+	@echo 'qc' >> $(JLINKEXE_SCRIPT)
+	JLinkExe -Device $(SUPPORTED_DEVICE) -Speed 4000 -If SWD $(JLINKEXE_SCRIPT)
