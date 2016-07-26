@@ -17,8 +17,8 @@ all: libs src
 # convert to hex and bin
 #	@$(OBJCOPY) -O binary $(PROGRAM_NAME).elf $(PROGRAM_NAME).bin
 	@$(OBJCOPY) -O ihex $(PROGRAM_NAME).elf $(PROGRAM_NAME).hex
-	@$(SIZE) -d -B $(PROGRAM_NAME).elf $(PROGRAM_NAME).hex > $(PROGRAM_NAME).info_size
 # display binaries size
+	@$(SIZE) -d -B $(PROGRAM_NAME).elf > $(PROGRAM_NAME).info_size
 	@echo -------------------------------------------------------
 	@cat $(PROGRAM_NAME).info_size
 
@@ -32,13 +32,14 @@ cleanall:clean
 	$(MAKE) -C libs clean
 clean:
 	$(MAKE) -C src $@
-	rm -f $(PROGRAM_NAME).elf $(PROGRAM_NAME).hex $(PROGRAM_NAME).bin $(PROGRAM_NAME).info_elf $(PROGRAM_NAME).info_size $(PROGRAM_NAME).info_code $(PROGRAM_NAME).info_symbol
+	rm -f $(PROGRAM_NAME).*
+	rm -f bin/.fuse_hidden*
 
 # show optimize settings
 tshow:
-		@echo "-------------------------------------------------"
-		@echo "optimize settings: $(InfoTextLib), $(InfoTextSrc)"
-		@echo "-------------------------------------------------"
+	@echo "-------------------------------------------------"
+	@echo "optimize settings: $(InfoTextLib), $(InfoTextSrc)"
+	@echo "-------------------------------------------------"
 
 flash:all
 #	use JLink for linux

@@ -24,15 +24,13 @@ src: app.a
 app.a: $(OBJS)
 		cd startup && $(AR) cr ../app.a $(OBJS)
 $(OBJS):%.o: %.c
-		$(CC) -c $< -o startup/$*.o $(CFLAGS) $(CFLAGS_USE_NEWLIB)
-
+	$(CC) -c $< -o startup/$*.o $(CFLAGS) $(CFLAGS_USE_NEWLIB)
 
 .PHONY: src clean tshow
-
 clean:
-		rm -f app.a 
-		cd startup && rm -f $(OBJS)
+	rm -f app.a 
+	cd startup && rm -f $(OBJS)
 tshow:
-		@echo "-------------------------------------------------"
-		@echo "optimize settings: $(InfoTextLib), $(InfoTextSrc)"
-		@echo "-------------------------------------------------"
+	@echo "-------------------------------------------------"
+	@echo "optimize settings: $(InfoTextLib), $(InfoTextSrc)"
+	@echo "-------------------------------------------------"
