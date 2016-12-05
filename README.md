@@ -31,33 +31,25 @@ http://www.embbnux.com/2014/02/01/linux_stm32_use_openocd_openjtag/)
 
 #### Eclipse project
 
-在Eclipse中新建一个C工程为"Makefile project"指定toolchain为Other toolchain。
+在Eclipse中新建一个C工程为"Makefile project"指定toolchain为no toolchain。
 
-工程属性properties，左侧定位C/C++ Build->toolchain editor
-右侧将current toolchain改为Cross GCC
+左侧定位C/C++ Build根标签：取消勾选"Use default build command"，这里使用四线程编译
 
-左侧定位C/C++ Build->settings中的code
+	make -j4
 
-右侧Tool settings的cross setting填入前缀
-
-	arm-none-eabi-
-	
-PATH改为工具链的bin目录
-
-	/home/li/programs/toolchain/gcc-arm-none-eabi-5_3-2016q1/bin/
-	
-
-最后在左侧定位C/C++ Build根标签中，取消勾选“Generate Makefile Automatically”，下面的build dir改为工程根目录，比如像这样
+取消勾选“Generate Makefile Automatically”，下面的build dir改为工程根目录，比如像这样
 
 	${workspace_loc:/my-project-for-stm32}
 
-工程属性->左侧定位C/C++ General->Path and Symbol，右侧修改各种symbol(宏定义)和include目录。参考Makefile.common的INCLUDE变量和宏定义
+然后左侧定位C/C++ General->Path and Symbol，右侧修改各种symbol(宏定义)和include目录。参考Makefile.common的INCLUDE变量和宏定义，至少得把STM32的库和工具链arm-none-eabi加进来：
+
+![](/screenshot-1.png)
+
+左侧定位C/C++ Build->settings，取消勾选Binary Parsers下面的二进制文件，这个二进制文件也是多余。
 
 此刻，右键工程选择build project即可编译
 
-不使用eclipse产生二进制（elf文件），在工程属性左侧定位C/C++ Build->settings，取消勾选Binary Parsers下面的二进制文件
-	
-由于是CROSS-compile交叉编译，实际使用中还是发现不少type not resolved错误，属于正常现象，可以将其关闭：project settings中的code analysis右边“使用工程设置”(即仅本项目生效)->取消symbol not resolved和type not resolved
+由于是交叉编译，实际使用中还是发现不少type not resolved错误，属于正常现象，可以将其关闭：project settings中的code analysis右边“使用工程设置”(即仅本项目生效)->取消symbol not resolved和type not resolved
 
 #### Debug via JLink
 安装[GNU ARM Ecplise插件](https://gnuarmeclipse.github.io/)
