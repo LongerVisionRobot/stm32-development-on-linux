@@ -79,6 +79,8 @@ Startup标签中
     
 实际上要参考GNU ARM Ecplise插件官网的使用说明，原文非常难看懂，字体好模糊。。。
 
+也可以是用openocd的gdb端口进行调试，这个我尝试成功过，但是忘记步骤了。
+
 #### make clean
 
 由于实际应用中很少修改libstm32.a这个库文件，为节省编译时间，我将clean动作设定为不删掉libstm32.a，想彻底clean可以执行
@@ -96,7 +98,7 @@ Startup标签中
 	sudo apt-get install openocd
 	sudo apt-get install libnet-telnet-perl
 
-插上jlink，添加白名单。
+插上jlink或者STLink，添加udev白名单。
 	
     lsusb
     # 记下当前的jlink的硬件id，例如，ID 1366:0101
@@ -107,7 +109,17 @@ Startup标签中
 这样权限666,使用openocd就不用sudo了. 
 拔下，插上一次.
 
-使用原作者的perl脚本，直接执行就能烧写bin文件
+然后指定合适的下载器和target单片机（参考上面教程，外链）开启telnet监听端口
+
+	cd /usr/share/openocd/scripts
+	
+	# For JLink v8
+	openocd -f ./interface/jlink.cfg -f ./target/stm32f1x.cfg
+	
+	# For STLink v2
+	openocd -f ./interface/stlink-v2.cfg -f ./target/stm32f1x.cfg
+
+新建一个终端，使用原作者的perl脚本，直接执行就能烧写bin文件
 
 	./do_flash.pl bin/main.bin    
     
@@ -115,51 +127,14 @@ Startup标签中
 
 方法二：使用JLinkExe
 
-首先安装Jlink，上面有提到。
+JLink明显比STLINK好用，这里仅适用于JLink设备。
+
+首先在官网下载并安装Jlink，上面有提到。
 
 目前把JLinkExe作为下载软件，写进去Makefile脚本了，可以根据实际芯片型号修改Makefile.common中的SUPPORTED_DEVICE变量。
 
-### Mac OS
+方法三：串口ISP下载
 
-You need some tools as follows:
+使用[stm32flash](https://github.com/ARMinARM/stm32flash)进行串口下载，注意某些Linux发行版的串口芯片CH340驱动有问题，使用stm32flash无法下载（Ack Fail），实测换用CP212x串口下载成功。
 
-* `stm32flash` </br>
-Flash program for the STM32 ARM processors using the ST serial bootloader over UART or I2C
-* `coreutils` </br>
-Readlink
-* `gcc-arm-none-eabi`
-
-#### stm32flash
-install some tools that `make` need:
-
-    $ brew install autoconf
-    $ brew install automake
-    $ brew install pkg-config
-
-
-Then install stm32flash:
-
-
-    $ git clone https://github.com/ARMinARM/stm32flash
-    $ cd stm32flash
-    $ make
-
-
-install coreutils
-
-	$ brew install coreutils
-
-install gcc-arm-none-eabi
-
-	$ brew install gcc-arm-none-eabi
-
-change $(TOP)
-
-    $ cd stm32_development_on_linux
-    $ vi Makefile.common
-	#Change line 32 to:
-	TOP=$(shell greadlink -f "$(dir $(lastword $(MAKEFILE_LIST)))")
-
-
-
-
+	stm32flash -w bin/main.hex -v -g 0x0 /dev/ttyUSB0 -b 115200
